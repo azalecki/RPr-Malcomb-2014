@@ -10,7 +10,7 @@ knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "../../docs/report") })
 ---
 
-# Abstract 
+# Abstract
 
 Malcomb, Weaver and Krakowka ([2014](https://doi.org/10.1016/j.apgeog.2014.01.004)) published one of the first sub-national geographic climate change vulnerability models for a developing country (1.4).
 The authors intended for the study to be replicable across space (other African countries with similar data available) (7.1), time (when new survey data is published) (4.5 and 7.1), and vulnerability stimuli (7.1).
@@ -25,7 +25,9 @@ Second, a fully reproducible publication can be more readily replicated in new g
 Third, climate change is causing increasingly severe in Africa.
 Improving the reproducibility and replicability of climate vulnerability research will hopefully enhance the potential for research to inform policy and reduce harm caused by climate change.
 
-Malcomb et al (2014) produce two models of interest for Malawi. Figure 4, labelled "Malawi Household Resilience", visualizes the average adaptive capacity score of households in each traditional authority. Figure 5, labelled "Malawi Composite Vulnerability Index", visualizes vulnerability scores by locations (cells) in a continuous raster grid.
+Malcomb et al (2014) produce two models of interest for Malawi.
+Figure 4, labelled "Malawi Household Resilience", visualizes the average adaptive capacity score of households in each traditional authority.
+Figure 5, labelled "Malawi Composite Vulnerability Index", visualizes vulnerability scores by locations (cells) in a continuous raster grid.
 In this study, we will attempt to identically reproduce figure 4 (adaptive capacity by traditional authority) and figure 5 (vulnerability grid) using The R Project for Statistical Computing and the same data sources cited in the original publication.
 We will visually compare our resulting reproduction figures with the original figures.
 Comparison will be aided by digitizing and joining the original figure results to the reproduction results for each model, and then calculating any differences between them.
@@ -38,7 +40,12 @@ The original study is a descriptive geographic multi-criteria analysis based on 
 The replication study data and code will be made available in a GitHub repository to the greatest extent that licensing and file sizes permit.
 The repository will be made public at [github.com/HEGSRR/RPr-Malcomb-2014](https://github.com/HEGSRR/RPr-Malcomb-2014)
 
-Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. *Applied Geography* 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004).
+Malcomb, D. W., E. A. Weaver, and A.
+R. Krakowka.
+2014.
+Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi.
+*Applied Geography* 48:17--30.
+[DOI:[10.1016/j.apgeog.2014.01.004](DOI:%5B10.1016/j.apgeog.2014.01.004){.uri}](https://doi.org/10.1016/j.apgeog.2014.01.004).
 
 ### Keywords
 
@@ -55,7 +62,9 @@ The working hypotheses are therefore:
 
 > H2: There is no perfect positive between Malcom et al's ranking of locations by climate vulnerability and our reproduction study's ranking of locations by climate vulnerability.
 
-We will evaluate each of these hypotheses using a Spearman's Rho Correlation. A failure to reject these hypotheses would indicate that our results do not exactly match those of the original authors. A positive correlation approaching 1 would indicate a partial reproduction
+We will evaluate each of these hypotheses using a Spearman's Rho Correlation.
+A failure to reject these hypotheses would indicate that our results do not exactly match those of the original authors.
+A positive correlation approaching 1 would indicate a partial reproduction
 
 ### Original study design
 
@@ -64,7 +73,7 @@ The study is a multi-criteria analysis using geographic information systems (GIS
 
 The **spatial extent** of the study was the country of Malawi.
 The **spatial scale** of the study was the third administrative level (traditional authorities) and a raster grid of unknown spatial resolution.
-The **temporal extent** of the study was explicitly 2004&mdash;2010 (4.5), but the contains secondary data collected earlier (3.6 and F5).
+The **temporal extent** of the study was explicitly 2004---2010 (4.5), but the contains secondary data collected earlier (3.6 and F5).
 
 The model themes, indicators, and weights were selected based upon 70 interviews and 11 village focus groups from field trips to Malawi in March and August of 2011 (1.4, 4.2 and A1).
 Themes and indicators were also contextualized in literature (3.3 through 3.7) and adjusted based on redundancy and representativeness across the country (4.3).
@@ -74,7 +83,7 @@ Although the authors emphasize a grounded local evidence-based selection of indi
 
 The study did not use any **randomization**.
 
-The original study was conducted using STATA&trade; (4.4) and ArcGIS&trade; (4.6, F3 and F4) with unspecified software versions, by 2012 according to creation dates on map figures (F3, F4 and F5).
+The original study was conducted using STATA™ (4.4) and ArcGIS™ (4.6, F3 and F4) with unspecified software versions, by 2012 according to creation dates on map figures (F3, F4 and F5).
 
 # Computational environment
 
@@ -121,7 +130,6 @@ writeLines(
   here("procedure", "environment", paste0("r-environment-", Sys.Date(), ".txt"))
 )
 ```
-
 
 ```{r file-paths}
 # set up default knitr parameters
@@ -173,7 +181,7 @@ lakes_v <- st_as_sf(read_csv(here(public_r, "major_lakes.csv"))[, c("name", "the
 
 ## Livelihood zones
 
-Livelihood zones geographic data may be downloaded from the FEWS NET Data Center at https://fews.net/fews-data/335.
+Livelihood zones geographic data may be downloaded from the FEWS NET Data Center at <https://fews.net/fews-data/335>.
 
 ```{r download-livelihood-zones, eval = FALSE}
 # if livelihood zones geographic data does not exist, the download and unzip it
@@ -196,22 +204,22 @@ An MVAC 2005 report on livelihood zones appears in the references with an expire
 
 Livelihood sensitivity is measured with the following variables from FEWSnet livelihood zone data.
 
-- 6%: percent of food from own farm (T2)
-  - ability to meet food needs (T1 theory)
-  - % food intake from personal farm (T1 indicator)
-  - % of food that poor households receive independently from their own farm, an indication of sustainability of livelihoods (3.6)
-- 6%: percent income from wage labor (T2)
-  - % of income that poor households receive from wage labor (3.6)
-  - income source (T1 theory)
-  - % poor income from labor (T1 indicator)
-- 4%: percent income from cash crops (T2)
-  - % of labor income that is susceptible to market shocks (i.e. tobacco, sugar, tea, & coffee (3.6)
-  - cash crop exposure (T1 theory)
-  - % non-food crop (cotton, tobacco, tea) (T1 indicator)
-- 4%: disaster coping strategy (T2)
-  - ecological destruction associated with livelihood coping strategies during time of crisis (3.6)
-  - ecological coping effect (T1 theory)
-  - access to alternative form of income (T1 indicator)
+-   6%: percent of food from own farm (T2)
+    -   ability to meet food needs (T1 theory)
+    -   \% food intake from personal farm (T1 indicator)
+    -   \% of food that poor households receive independently from their own farm, an indication of sustainability of livelihoods (3.6)
+-   6%: percent income from wage labor (T2)
+    -   \% of income that poor households receive from wage labor (3.6)
+    -   income source (T1 theory)
+    -   \% poor income from labor (T1 indicator)
+-   4%: percent income from cash crops (T2)
+    -   \% of labor income that is susceptible to market shocks (i.e. tobacco, sugar, tea, & coffee (3.6)
+    -   cash crop exposure (T1 theory)
+    -   \% non-food crop (cotton, tobacco, tea) (T1 indicator)
+-   4%: disaster coping strategy (T2)
+    -   ecological destruction associated with livelihood coping strategies during time of crisis (3.6)
+    -   ecological coping effect (T1 theory)
+    -   access to alternative form of income (T1 indicator)
 
 Livelihood zones attribute data was provided by FEWS NET in the form of one three spreadsheets describing typical livelihood profiles for each zone, with one sheet for `poor` households, one for `middle` income households, and one for `rich` households.
 This data was based on focus groups with stakeholders in each livelihood zone.
@@ -240,7 +248,7 @@ rm(lhz_t)
 
 The adaptive capacity analysis is conducted in traditional authorities, which may be provided by the "GADM administrative boundaries for Africa" cited on maps of household resilience (F3 and F4).
 No date, version, or formal citation for this data is provided in the original study.
-Traditional authorities (TAs) data can be downloaded from Database of Global Administrative Areas (GADM) version 2.8 at https://gadm.org/download_country_v2.html and unzipped.
+Traditional authorities (TAs) data can be downloaded from Database of Global Administrative Areas (GADM) version 2.8 at <https://gadm.org/download_country_v2.html> and unzipped.
 This data must be downloaded directly from GADM.
 While the data license permits free use of data for research purposes and publication, it does not permit redistribution.
 
@@ -269,8 +277,7 @@ if (!"MWI_adm2.shp" %in% list.files(private_r)) {
 
 ## Traditional authorities (TAs)
 
-Load traditional authorities (TA) data, fix geometry data, and count
-types of areas.
+Load traditional authorities (TA) data, fix geometry data, and count types of areas.
 
 ```{r load traditional authorities, fig.height=2}
 ta_v <- read_sf(here(private_r, "MWI_adm2.shp")) %>% st_make_valid() 
@@ -403,16 +410,16 @@ The drought risk data is based on "a global monthly gridded precipitation datase
 
 Physical exposure is measured with the following two indicators.
 
-- 20%: estimated risk for flood hazard (T2)
-  - floods & rain variability (T1 theory)
-  - flood events (T1 indicator)
-  - risks of flood (3.7)
-  - global estimated risk index for flood hazard (R)
-- 20%: exposition to drought events (T2)
-  - drought & dry spells (T1 theory)
-  - drought indices (T1 indicator)
-  - (risks of) drought exposure (3.7)
-  - physical exposition to drought events 1980 - 2001 (R)
+-   20%: estimated risk for flood hazard (T2)
+    -   floods & rain variability (T1 theory)
+    -   flood events (T1 indicator)
+    -   risks of flood (3.7)
+    -   global estimated risk index for flood hazard (R)
+-   20%: exposition to drought events (T2)
+    -   drought & dry spells (T1 theory)
+    -   drought indices (T1 indicator)
+    -   (risks of) drought exposure (3.7)
+    -   physical exposition to drought events 1980 - 2001 (R)
 
 The UNEP Global Risk Data Platform used for this research is no longer available online.
 The data is provided with the research compendium.
@@ -439,58 +446,58 @@ Adaptive capacity is composed of **assets** and **access** with the following DH
 
 ### Assets
 
-- 6%: Arable land (hectares) (T2)
-  - amount of arable land (T1 theory) per household (T1 indicator)
-  - larger landholders can diversify crops and sell food (3.4)
-- 4%: Number of livestock units (T2)
-  - livestock (T1 theory)
-  - number of animals per household by type (T1 indicator)
-  - animals used as coping strategy (3.4)
-- 4%: Wealth index score (T2)
-  - money (T1 theory)
-  - wealth index (based on owned assets) (T1 indicator)
-  - wealth (disposable capital assets) (3.4)
-  - income is discussed separately from wealth (3.4) but is not included as an indicator
-- 3%: Number in household sick in past 12 months (T2)
-  - good health (T1 theory and 3.4)
-  - sick in the past 12 months (T1 indicator)
-- 3%: Number of orphans in household (T2)
-  - orphan care (T1 theory)
-  - number of orphans or vulnerable children (T1 indicator)
-  - orphans... are a highly socially vulnerable subset of the population (3.4)
-  - orphan care adds tremendous burden to families that are... poor and food insecure (3.4)
+-   6%: Arable land (hectares) (T2)
+    -   amount of arable land (T1 theory) per household (T1 indicator)
+    -   larger landholders can diversify crops and sell food (3.4)
+-   4%: Number of livestock units (T2)
+    -   livestock (T1 theory)
+    -   number of animals per household by type (T1 indicator)
+    -   animals used as coping strategy (3.4)
+-   4%: Wealth index score (T2)
+    -   money (T1 theory)
+    -   wealth index (based on owned assets) (T1 indicator)
+    -   wealth (disposable capital assets) (3.4)
+    -   income is discussed separately from wealth (3.4) but is not included as an indicator
+-   3%: Number in household sick in past 12 months (T2)
+    -   good health (T1 theory and 3.4)
+    -   sick in the past 12 months (T1 indicator)
+-   3%: Number of orphans in household (T2)
+    -   orphan care (T1 theory)
+    -   number of orphans or vulnerable children (T1 indicator)
+    -   orphans... are a highly socially vulnerable subset of the population (3.4)
+    -   orphan care adds tremendous burden to families that are... poor and food insecure (3.4)
 
 ## Access
 
-- 4%: time to water source (T2)
-  - basics (T1 theory)
-  - water (time to source) (T1 indicator)
-  - burden that often falls to women and can consume large amounts of time... in a time of shock or drought, water collection time can be protracted causing even greater hardship and vulnerability (3.5)
-- 4%: own a cell phone (T2)
-  - media and information (T1 theory)
-  - own a cell phone (Y/N) (T1 indicator)
-  - households were better prepared, informed and warned about disasters through being well-connected through radio, mobile technology, or tribal networks (3.5)
-- 3%: own a radio (T2)
-  - technology sharing (T1 theory)
-  - own a radio (Y/N) (T1 indicator)
-  - Radio programs are powerful tools for reaching previously inaccessible populations (3.5)
-- 3%: electricity (T2)
-  - basics (T1 theory)
-  - electricity (Y/N) (T1 indicator)
-  - access to the electrical grid (3.5)
-- 2%: type of cooking fuel (T2)
-  - basics (T1 theory)
-  - cooking fuel type (T1 indicator)
-  - selling of charcoal is one of the top coping strategies during periods of food insecurity and market shocks (3.5)
-- 2%: house setting (urban/rural) (T2)
-  - market access (T1 theory)
-  - rural, peri-urban, urban (T1 indicator)
-  - nearest vehicle-accessible road can be several kilometers and the nearest paved road for public transportation to urban centers might be a days or more journey by foot (3.5)
-- 2%: sex of head of household (T2)
-  - power and decision-making (T1 theory)
-  - female-headed HH (Y/N) (T1 indicator)
-  - households headed by females are more vulnerable based on less access to sources of power, land, and resources (3.5)
-  - households headed by one parent or by children (encompassed in the variable family structure) were seen as more vulnerable (3.5)
+-   4%: time to water source (T2)
+    -   basics (T1 theory)
+    -   water (time to source) (T1 indicator)
+    -   burden that often falls to women and can consume large amounts of time... in a time of shock or drought, water collection time can be protracted causing even greater hardship and vulnerability (3.5)
+-   4%: own a cell phone (T2)
+    -   media and information (T1 theory)
+    -   own a cell phone (Y/N) (T1 indicator)
+    -   households were better prepared, informed and warned about disasters through being well-connected through radio, mobile technology, or tribal networks (3.5)
+-   3%: own a radio (T2)
+    -   technology sharing (T1 theory)
+    -   own a radio (Y/N) (T1 indicator)
+    -   Radio programs are powerful tools for reaching previously inaccessible populations (3.5)
+-   3%: electricity (T2)
+    -   basics (T1 theory)
+    -   electricity (Y/N) (T1 indicator)
+    -   access to the electrical grid (3.5)
+-   2%: type of cooking fuel (T2)
+    -   basics (T1 theory)
+    -   cooking fuel type (T1 indicator)
+    -   selling of charcoal is one of the top coping strategies during periods of food insecurity and market shocks (3.5)
+-   2%: house setting (urban/rural) (T2)
+    -   market access (T1 theory)
+    -   rural, peri-urban, urban (T1 indicator)
+    -   nearest vehicle-accessible road can be several kilometers and the nearest paved road for public transportation to urban centers might be a days or more journey by foot (3.5)
+-   2%: sex of head of household (T2)
+    -   power and decision-making (T1 theory)
+    -   female-headed HH (Y/N) (T1 indicator)
+    -   households headed by females are more vulnerable based on less access to sources of power, land, and resources (3.5)
+    -   households headed by one parent or by children (encompassed in the variable family structure) were seen as more vulnerable (3.5)
 
 Geographic USAID Demographic and Health Survey (DHS) data requires pre-approved access clearance and login credentials from the DHS Program.
 For this reproduction study, the following procedure was used to gain access:
@@ -506,7 +513,7 @@ For this reproduction study, the following procedure was used to gain access:
 9.  Read and agree to the conditions of use for the DHS Program datasets and save these conditions for your metadata records.
 10. Enter a **Justification for using DHS Program Geographic Datasets:** The research aim is to reproduce Malcomb et al (2014) in which GPS Datasets are used to spatially join DHS Survey data to Malawi's Districts for the purpose of sub-national climate change vulnerability mapping. Therefore, the research will not be reproducible without the geographic datasets.
 
-The `rdhs` package can be used to download the data, provided a login email and project name via console and password via pop-up dialogue. 
+The `rdhs` package can be used to download the data, provided a login email and project name via console and password via pop-up dialogue.
 
 ```{r dhs-config, eval = FALSE}
 # ask user for login email and project name
@@ -537,6 +544,7 @@ dhs_downloads <- get_datasets(
 # If data has already been downloaded, this throws an error:
 # 'names' attribute [1] must be the same length as the vector [0]
 ```
+
 Load tabular data of household surveys
 
 ```{r load DHS survey data, messages=FALSE, warnings=FALSE}
@@ -545,7 +553,7 @@ dhshh <- readRDS(here(private_r, "datasets", "MWHR61SV.rds")) %>%
 head(dhshh)
 ```
 
-Load geographic data of household survey clusters. 
+Load geographic data of household survey clusters.
 Some household survey points are erroneously placed at the WGS 1984 coordinate reference system origin (Equator and Prime Meridian).
 
 ```{r load-DHS-geog-data, fig.height = 2}
@@ -557,7 +565,7 @@ dhsclusters %>% qtm()
 
 ### DHS Data Transformations
 
-In order to simultaneously maximize reproducibility while avoiding direct redistribution of DHS GPS data, we spatially join the GPS data to the Traditional Authority enumeration areas. 
+In order to simultaneously maximize reproducibility while avoiding direct redistribution of DHS GPS data, we spatially join the GPS data to the Traditional Authority enumeration areas.
 Adaptive capacity is ultimately mapped by traditional authority, but the data comes from household-level surveys.
 Surveys are grouped into clusters with one geographic point.
 Therefore, the traditional authority to which each survey will be assigned must be spatially joined to the cluster point, and then joined by attribute to the household survey.
@@ -582,6 +590,7 @@ paste(sum(is.na(cluster_ta$ta_id)),
   "of", nrow(cluster_ta), 
   "clusters did not spatially join to a populated traditional authority") %>% noquote()
 ```
+
 ```{r join-clusterta-to-surveys}
 # join traditional authority and urban/rural data from DHS clusters to each DHS survey
 # select variables for adaptive capacity analysis
@@ -621,6 +630,7 @@ paste(sum(is.na(cluster_ta$ta_id)),
 
 paste(sum(is.na(dhshh$ta_id)), "out of", nrow(dhsclusters), "households missing data due to failed spatial join" )
 ```
+
 Many household surveys contain inconclusive answers (e.g. "I don't know") or are missing data for survey questions used in the adaptive capacity calculation.
 The livestock variable will be calculated as a sum of four livestock types, so we remove any household with uncertain answers about any of the livestock types and remove households with missing data for all livestock types.
 Households with answers about some livestock types and missing data for others are still included in the data.
@@ -672,7 +682,7 @@ The **spatial extent** of the study was the country of Malawi (OSM relation [195
 
 The authors suggest that the scale of the phenomena of vulnerability dynamics in the context of climate change is at the **household level** (1.4, 2.2, 3.1 and 4.4).
 The authors use the third administrative level (traditional authorities) as the **spatial scale** and **units of analysis** of household resilience (4.4 and F4).
-The **spatial support** for the final analysis of climate vulnerability is a raster grid (4.6, F5) with unknown spatial resolution&mdash;appearing finer than the size of traditional authorities and the smallest unit on the scale bar, which is 12.5 kilometers (F5).
+The **spatial support** for the final analysis of climate vulnerability is a raster grid (4.6, F5) with unknown spatial resolution---appearing finer than the size of traditional authorities and the smallest unit on the scale bar, which is 12.5 kilometers (F5).
 We presume that the spatial resolution may be identical to at least one of the gridded physical exposure raster inputs.
 
 **Edge effects** and neighboring countries will not be addressed in the analysis (4.2).
@@ -696,42 +706,47 @@ Specifically, the study will be completed using The R Project for Statistical Co
 A complete list of required R packages is not known at the time of preregistration, but will be reported with the final publication.
 
 The study will attempt to reproduce the original methods exactly, but some differences may be inevitable due to ambiguous or conflicting information in the original article.
-We will plan to make the following reasonable decisions, which may differ from the authors' intentions:
-1. Figure 4 represents adaptive capacity, composed of assets and access.
-1. Adaptive capacity scores will be calculated for each household, and then household scores will be spatially joined by traditional authority and averaged.
-1. Figure 5 represents vulnerability, composed of adaptive capacity, livelihood sensitivity, and physical exposure.
-1. Every indicator will be rescaled to a 0 to 4 scale using the formula: `percent rank * 4`. This method is a compromise from the uncertainty caused by a 0 to 5 scale, quintiles, and nominal indicators.
-1. High ranks (4) will be assigned to better and safer conditions for each indicator.
-1. Weighted aggregation will be formulated so that the aggregate scores have a theoretical minimum of 0 and maximum of the assigned percentage for the thematic concept.
-  - Assets = ([land] * 0.06 + [livestock units] * 0.04 + [wealth] * 0.04 + [number sick] * 0.03 + [orphans] * 0.03) * 25
-  - Access = ([water] * 0.04 + [cell phone] * 0.04 + [radio] * 0.03 + [electricity] * 0.03 + [cooking fuel] * 0.02 + [urban/rural] * 0.02 + [female household] * 0.02) * 25
-  - Livelihood sensitivity = ([subsistence food] * 0.06 + [wage income] * 0.06 + [cash crop income] * 0.04 + [disaster coping] * 0.04) * 25
-  - Physical exposure = ([flood risk] * 0.2 + [drought exposure] * 0.2) * 50
-1. Each thematic indicator will be rasterized or resampled to the UNEP/GRID data input most closely resembling the spatial resolution of figure 5.
-1. Vulnerability will be calculated so that the aggregate scores have a theoretical minimum of 0 and maximum of 100. This is achieved by inverting physical exposure.
-  - Vulnerability = Assets + Access + Livelihood sensitivity + (40 - Physical Exposure)
-1. Any traditional authority missing adaptive capacity data from DHS surveys will be removed / masked from the final vulnerability analysis.
+We will plan to make the following reasonable decisions, which may differ from the authors' intentions: 1.
+Figure 4 represents adaptive capacity, composed of assets and access.
+1.
+Adaptive capacity scores will be calculated for each household, and then household scores will be spatially joined by traditional authority and averaged.
+1.
+Figure 5 represents vulnerability, composed of adaptive capacity, livelihood sensitivity, and physical exposure.
+1.
+Every indicator will be rescaled to a 0 to 4 scale using the formula: `percent rank * 4`.
+This method is a compromise from the uncertainty caused by a 0 to 5 scale, quintiles, and nominal indicators.
+1.
+High ranks (4) will be assigned to better and safer conditions for each indicator.
+1.
+Weighted aggregation will be formulated so that the aggregate scores have a theoretical minimum of 0 and maximum of the assigned percentage for the thematic concept.
+- Assets = ([land] \* 0.06 + [livestock units] \* 0.04 + [wealth] \* 0.04 + [number sick] \* 0.03 + [orphans] \* 0.03) \* 25 - Access = ([water] \* 0.04 + [cell phone] \* 0.04 + [radio] \* 0.03 + [electricity] \* 0.03 + [cooking fuel] \* 0.02 + [urban/rural] \* 0.02 + [female household] \* 0.02) \* 25 - Livelihood sensitivity = ([subsistence food] \* 0.06 + [wage income] \* 0.06 + [cash crop income] \* 0.04 + [disaster coping] \* 0.04) \* 25 - Physical exposure = ([flood risk] \* 0.2 + [drought exposure] \* 0.2) \* 50 1.
+Each thematic indicator will be rasterized or resampled to the UNEP/GRID data input most closely resembling the spatial resolution of figure 5.
+1.
+Vulnerability will be calculated so that the aggregate scores have a theoretical minimum of 0 and maximum of 100.
+This is achieved by inverting physical exposure.
+- Vulnerability = Assets + Access + Livelihood sensitivity + (40 - Physical Exposure) 1.
+Any traditional authority missing adaptive capacity data from DHS surveys will be removed / masked from the final vulnerability analysis.
 
 ## Adaptive Capacity
 
 The variables for adaptive capacity are aggregated into thematic concepts and referenced in the original paper as outlined below:
 
-- 40%: Adaptive capacity (T2)
-  - "adaptive capacity" defined as "household-level assets to recover from disasters and access to resources" (2.2) and referred to as:
-    - "adaptive capacity", "capacity score", or "adaptive capacity score" (3.3, 4.6 formula, 5.2, 5.4, 6.3)
-    - "assets" and "access" (3.3, 5.2, F3 and F4)
-    - "assets" and "access" included, but not "adaptive capacity" (1.4, T1 theory, F5)
-    - "resilience", "household(-level) resilience" or "resilience scores" (5.2, 5.3, F3, F4 and F5, 6.4)
-    - "vulnerability" (4.1, 4.4, 4.5, 5.1, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.4, 7.2)
-  - measured as a positive condition (4.6)
-- 20%: Assets (T2)
-  - defined only as a component of adaptive capacity: "assets to recover from disasters" (2.2) and referred to as:
-    - "assets" (1.4, 3.3, 3.4, T1 theory, F5)
-  - measured as a positive condition (4.6)
-- 20%: Access (T2)
-  - defined only as a component of adaptive capacity: "access to resources" (2.2) and referred to as:
-    - "access" (1.4, 3.3, 3.5, T1 theory, F5)
-  - measured as a positive condition (4.6)
+-   40%: Adaptive capacity (T2)
+    -   "adaptive capacity" defined as "household-level assets to recover from disasters and access to resources" (2.2) and referred to as:
+        -   "adaptive capacity", "capacity score", or "adaptive capacity score" (3.3, 4.6 formula, 5.2, 5.4, 6.3)
+        -   "assets" and "access" (3.3, 5.2, F3 and F4)
+        -   "assets" and "access" included, but not "adaptive capacity" (1.4, T1 theory, F5)
+        -   "resilience", "household(-level) resilience" or "resilience scores" (5.2, 5.3, F3, F4 and F5, 6.4)
+        -   "vulnerability" (4.1, 4.4, 4.5, 5.1, 5.3, 5.4, 5.5, 6.1, 6.2, 6.3, 6.4, 7.2)
+    -   measured as a positive condition (4.6)
+-   20%: Assets (T2)
+    -   defined only as a component of adaptive capacity: "assets to recover from disasters" (2.2) and referred to as:
+        -   "assets" (1.4, 3.3, 3.4, T1 theory, F5)
+    -   measured as a positive condition (4.6)
+-   20%: Access (T2)
+    -   defined only as a component of adaptive capacity: "access to resources" (2.2) and referred to as:
+        -   "access" (1.4, 3.3, 3.5, T1 theory, F5)
+    -   measured as a positive condition (4.6)
 
 ### Rescale adaptive capacity indicators
 
@@ -773,8 +788,7 @@ head(hh_capacity_t[,20:32])
 ### Household adaptive capacity
 
 Calculate household-level adaptive capacity scores based on original study Table 2 weights.
-The indicators have already been rescaled to a possible domain of `0` to `4`, and the weights sum to `0.4`, giving a possible domain of
-adaptive capacity scores from `0.0` to `1.6`.
+The indicators have already been rescaled to a possible domain of `0` to `4`, and the weights sum to `0.4`, giving a possible domain of adaptive capacity scores from `0.0` to `1.6`.
 
 ```{r hh-capacity}
 hh_capacity_t <- mutate(hh_capacity_t, capacity = 
@@ -834,8 +848,7 @@ ta_capacity_t <- hh_capacity_t %>%
   )
 ```
 
-Now that household adaptive capacity data has been aggregated, they may be saved to the `data\derived\public`
-directory.
+Now that household adaptive capacity data has been aggregated, they may be saved to the `data\derived\public` directory.
 
 ```{r save-TA-adaptive-capacity}
 ta_capacity_t %>% saveRDS(here(public_d, "adaptive_capacity.RDS"))
@@ -857,14 +870,14 @@ paste(nrow(ta_capacity_t),
       "TAs have adaptive capacity data") %>% noquote()
 ```
 
-Finding scores for 215 traditional authorities is surprising, and most likely relates to differences in discovery and treatment of geometry errors and missing data. The reason(s) for these differences cannot be determined with the content of the original manuscript.
+Finding scores for 215 traditional authorities is surprising, and most likely relates to differences in discovery and treatment of geometry errors and missing data.
+The reason(s) for these differences cannot be determined with the content of the original manuscript.
 
 ### Mapping adaptive capacity
 
 Join adaptive capacity data to geographic TAs and rescale in attempt to match original publication.
 The original publication figure 4 shows ranges from 11.48 to 25.77, but after rescaling indicators to domains of 0 to 4 and multiplying by percentages in table 2 (which sum to 0.4), the theoretical domain is only 0 to 1.6.
-We might suppose that the authors had rescaled adaptive capacity to a possible domain of 0 to 40 in accordance with the 40% weight of adaptive capacity in the overall
-vulnerability model.
+We might suppose that the authors had rescaled adaptive capacity to a possible domain of 0 to 40 in accordance with the 40% weight of adaptive capacity in the overall vulnerability model.
 Therefore, we may multiply our possible domain of 0 to 1.6 by 25 to achieve a possible domain of 0 to 40.
 
 ```{r join-adaptive-capacity, warning = F}
@@ -887,8 +900,15 @@ ta_stats[-c(2,7,10:12,14),] %>% kable() # brackets remove unnecessary statistics
 rm(ta_stats, ta_capacity_t)
 ```
 
-The original publication uses the Jenks Natural Breaks method to
-classify the data.
+```{r histogram-ac}
+# making a histogram for rpac  
+
+hist_rpac <- ta_v$rpac
+hist(hist_rpac)
+
+```
+
+The original publication uses the Jenks Natural Breaks method to classify the data.
 
 ```{r classify-adaptive-capacity, warning = F}
 # calculate breaks for four Jenks natural breaks classes
@@ -932,39 +952,22 @@ We will use an interior buffer of the traditional authority polygons, optimized 
 After inspecting a histogram of the mean brightness values, we will reclassify the values as closely to the four classes on the original figure 4 as possible and then manually adjust the attribute values for any misclassified traditional authorities.
 We will compare original and reproduction household resilience results by creating a confusion matrix, calculating the Spearman's Rho correlation coefficient (expecting a value of 1 for perfect positive correlation), and creating a thematic map of the difference between the original results and replication results.
 
-
 #### Digitize original study figure 4
 
-Ordinal data from figure 4 was digitized in QGIS with the following
-procedure:
+Ordinal data from figure 4 was digitized in QGIS with the following procedure:
 
-1.  Copy image from the original publication `pdf` file using Adobe
-    Acrobat Pro
-2.  Paste the image and save as a `.png` file with pixel dimensions 1982
-    by 2811
-3.  Use QGIS 3.26.3 Georeference the map image to match `ta_v.gpkg`
-    using WGS 84 geographic coordinates (epsg:4326). Use linear
-    georeferencing with points in `metadata\malcomb_fig4.png.points`
-4.  Make internal buffer to reduce the noise from boundary line
-    symbology.
+1.  Copy image from the original publication `pdf` file using Adobe Acrobat Pro
+2.  Paste the image and save as a `.png` file with pixel dimensions 1982 by 2811
+3.  Use QGIS 3.26.3 Georeference the map image to match `ta_v.gpkg` using WGS 84 geographic coordinates (epsg:4326). Use linear georeferencing with points in `metadata\malcomb_fig4.png.points`
+4.  Make internal buffer to reduce the noise from boundary line symbology.
     1.  Project `ta_v` to UTM 36S epsg:32736: `ta_v_fig4.gpkg:utm36s`.
-    2.  Calculate an internal buffer of `-600m`:
-        `ta_v_fig4.gpkg:utm36s`.
+    2.  Calculate an internal buffer of `-600m`: `ta_v_fig4.gpkg:utm36s`.
     3.  Project back to WGS 84 epsg:4326: `ta_v_fig4.gpkg:buffer_wgs84`.
-5.  Extract the average and standard deviation of the original map's
-    red, green, and blue bands for each traditional authority using the
-    zonal statistics algorithm: `ta_v_fig4.gpkg:r`, `ta_v_fig4.gpkg:rb`
-    and `ta_v_fig4.gpkg:rbg`
-6.  Join the zonal statistics results to the `ta_v` layer by the `ID_2`
-    attribute: `ta_v_fig4.gpkg:ta_v_fig4`
-7.  Classify the results in a new field `orac` (original adaptive
-    capacity) using the field calculator and `CASE` statements, choosing
-    break points that classify most traditional authorities correctly.
-8.  Visually inspect results and edit the `orac` attribute for any
-    mis-classified area.
-9.  The original map contains data in six conservation areas, noted with
-    digitized point features in `ta_v_fig4.gpkg:fig4_errors`. Other
-    areas are coded as follows:
+5.  Extract the average and standard deviation of the original map's red, green, and blue bands for each traditional authority using the zonal statistics algorithm: `ta_v_fig4.gpkg:r`, `ta_v_fig4.gpkg:rb` and `ta_v_fig4.gpkg:rbg`
+6.  Join the zonal statistics results to the `ta_v` layer by the `ID_2` attribute: `ta_v_fig4.gpkg:ta_v_fig4`
+7.  Classify the results in a new field `orac` (original adaptive capacity) using the field calculator and `CASE` statements, choosing break points that classify most traditional authorities correctly.
+8.  Visually inspect results and edit the `orac` attribute for any mis-classified area.
+9.  The original map contains data in six conservation areas, noted with digitized point features in `ta_v_fig4.gpkg:fig4_errors`. Other areas are coded as follows:
 
 | code |                    description                     |
 |:----:|:--------------------------------------------------:|
@@ -976,11 +979,10 @@ procedure:
 |  3   |                        ...                         |
 |  4   |             highest adaptive capacity              |
 
-
 #### Original study figure 4
 
 Load digitized figure 4 data and display counts of results.
-Convert all forms of missing data to `NA` to be excluded from mapping and statistics. 
+Convert all forms of missing data to `NA` to be excluded from mapping and statistics.
 Join original figure 4 adaptive capacity results to `ta_v`.
 
 ```{r load-fig4}
@@ -1044,22 +1046,22 @@ cor.test(ta_v$rpac_class, ta_v$orac, method = "spearman", alternative="greater")
 
 ## Vulnerability
 
-- 40%: Adaptive Capacity
-- 20%: Livelihood Sensitivity (T2)
-  - "sensitivity" defined as "degree to which a system will respond to an external disturbing force" (2.2) and referred to as:
-    - "livelihood sensitivity" (1.4, 3.3, 3.6, T1 theory, 4.6 formula, F5)
-  - measured as a positive condition (4.6)
-- 40%: Physical exposure (T2)
-  - "exposure" defined as the "magnitude and frequency of forces that could stress a system" (2.2) and referred to as:
-    - "physical exposure" (1.4, 3.3, 3.7, 4.6 formula, T2)
-    - "biophysical exposure" (T1 theory)
-    - "exposure to floods and droughts" (F5)
-  - measured as a negative condition (4.6)
-- 100%: Household Resilience (T2)
-  - "resilience" defined as "ability of a household to prepare for, respond to and recover from complex drivers of vulnerability" (2.2, 5.6) and referred to as:
-    - "household resilience" calculated as "Adaptive Capacity + Livelihood Sensitivity - Physical Exposure" (4.6 formula)
-    - "vulnerability to climate change" calculated as "assets + access + livelihood sensitivity - physical exposure" (F5)
-    - "vulnerability" (title, 3.3, 3.6, 4.3, 4.5, 6.5, 7.1, 7.2)
+-   40%: Adaptive Capacity
+-   20%: Livelihood Sensitivity (T2)
+    -   "sensitivity" defined as "degree to which a system will respond to an external disturbing force" (2.2) and referred to as:
+        -   "livelihood sensitivity" (1.4, 3.3, 3.6, T1 theory, 4.6 formula, F5)
+    -   measured as a positive condition (4.6)
+-   40%: Physical exposure (T2)
+    -   "exposure" defined as the "magnitude and frequency of forces that could stress a system" (2.2) and referred to as:
+        -   "physical exposure" (1.4, 3.3, 3.7, 4.6 formula, T2)
+        -   "biophysical exposure" (T1 theory)
+        -   "exposure to floods and droughts" (F5)
+    -   measured as a negative condition (4.6)
+-   100%: Household Resilience (T2)
+    -   "resilience" defined as "ability of a household to prepare for, respond to and recover from complex drivers of vulnerability" (2.2, 5.6) and referred to as:
+        -   "household resilience" calculated as "Adaptive Capacity + Livelihood Sensitivity - Physical Exposure" (4.6 formula)
+        -   "vulnerability to climate change" calculated as "assets + access + livelihood sensitivity - physical exposure" (F5)
+        -   "vulnerability" (title, 3.3, 3.6, 4.3, 4.5, 6.5, 7.1, 7.2)
 
 ### Extent and spatial resolution
 
@@ -1106,7 +1108,8 @@ drw = dr %>% st_warp(blank, use_gdal = T, method = "bilinear")
 names(drw) <- "dre" # rename band to acronym for drought exposure
 plot(drw)
 ```
-Create a mask with the adaptive capacity results so that lakes, conservation areas, and traditional authorities with no data will not skew the classification / rescaling of drought exposure. 
+
+Create a mask with the adaptive capacity results so that lakes, conservation areas, and traditional authorities with no data will not skew the classification / rescaling of drought exposure.
 Apply this mask to drought exposure.
 Masking is our own decision based on intuition: it is not specified in the original publication.
 
@@ -1118,8 +1121,7 @@ drw <- drw * mask
 plot(drw)
 ```
 
-Classify drought exposure into quintile classes (0 to 4)
-Then rescale to 20% by multiplying by 4.
+Classify drought exposure into quintile classes (0 to 4) Then rescale to 20% by multiplying by 4.
 
 ```{r drought-rescale}
 # quintile break points
@@ -1156,6 +1158,7 @@ flw = fl %>% st_warp(blank, use_gdal = T, method = "near")
 names(flw) <- "flood_risk" # rename band to acronym for flood risk
 plot(flw)
 ```
+
 Mask and rescale flood.
 Since flood is already on scale from 0 to 4, simply multiply by 5 to achieve the 20% weight.
 
@@ -1306,7 +1309,6 @@ write_sf(ta_v, here(results), "ta")
 write_sf(lhz_v, here(results), "lhz")
 ```
 
-
 ### Evaluate vulnerability reproduction
 
 In order to compare the Malawi vulnerability results, we will georeference the original figure 5 map using QGIS georeferencer plugin.
@@ -1318,13 +1320,12 @@ We will compare original and reproduction Malawi vulnerability results by creati
 
 Comparing the reproduction of figure 5 with the original figure 5 requires first digitizing the original figure 5 (unclassified choropleth map with yellow to red gradient) in QGIS as follows:
 
-1. Copy image of figure 5 from the original publication `pdf` file using Adobe Acrobat Pro
-2. Paste the image and save as a `.png` file with pixel dimensions 1949
-    by 2811
-3. Use QGIS 3.26.3 Georeference the map image to match `ta_v.gpkg` using WGS 84 geographic coordinates (epsg:4326). Use linear georeferencing with points in `...`
-4. Convert `ta_capacity.tif` raster to vector polygons
-5. Extract the average blue and green bands from the georeferenced map image using `zonal statistics`
-6. Save results as `georef_bg.gpkg`.
+1.  Copy image of figure 5 from the original publication `pdf` file using Adobe Acrobat Pro
+2.  Paste the image and save as a `.png` file with pixel dimensions 1949 by 2811
+3.  Use QGIS 3.26.3 Georeference the map image to match `ta_v.gpkg` using WGS 84 geographic coordinates (epsg:4326). Use linear georeferencing with points in `...`
+4.  Convert `ta_capacity.tif` raster to vector polygons
+5.  Extract the average blue and green bands from the georeferenced map image using `zonal statistics`
+6.  Save results as `georef_bg.gpkg`.
 
 To approximate data values from the yellow to red gradient of the original map, the blue and green bands are then added, inverted, and rescaled to a range from 0 to 100.
 
@@ -1428,7 +1429,6 @@ write_stars(vulnerability_r, here(public_d, "fig5rp.tif"), layer = "rpv")
 
 # Conclusions
 
-
 # Integrity Statement
 
 This report and its preregistration were written after already attempting the reproduction study, including acquisition and analysis of all of the secondary data sources required.
@@ -1439,33 +1439,57 @@ Holler has previously reviewed and compared other climate vulnerability models f
 
 ## Referencing the original paper
 
-Malcomb, D. W., E. A. Weaver, and A. R. Krakowka. 2014. Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi. *Applied Geography* 48:17–30. DOI:[10.1016/j.apgeog.2014.01.004](https://doi.org/10.1016/j.apgeog.2014.01.004).
+Malcomb, D. W., E. A. Weaver, and A.
+R. Krakowka.
+2014.
+Vulnerability modeling for sub-Saharan Africa: An operationalized approach in Malawi.
+*Applied Geography* 48:17--30.
+[DOI:[10.1016/j.apgeog.2014.01.004](DOI:%5B10.1016/j.apgeog.2014.01.004){.uri}](https://doi.org/10.1016/j.apgeog.2014.01.004).
 
 ### Sections
 
-1. Introduction
-2. Complex vulnerability
-3. Evidence-based Indicators
-4. Methodology
-5. Results
-6. Discussion
-7. Conclusion
+1.  Introduction
+2.  Complex vulnerability
+3.  Evidence-based Indicators
+4.  Methodology
+5.  Results
+6.  Discussion
+7.  Conclusion
 
 ### Tables, figures, other elements
 
-- T1 Evidence-based complex vulnerability indicators
-- T2 Weighted indicators by metatheme
-- F1 Map of Malawi
-- F2 Vulnerability web
-- F3 Malawi Household Resilience (2004)
-- F4 Malawi Household Resilience (2010)
-- F5 Malawi Composite Vulnerability Index
-- A1 Appendix 1
-- R References
+-   T1 Evidence-based complex vulnerability indicators
+-   T2 Weighted indicators by metatheme
+-   F1 Map of Malawi
+-   F2 Vulnerability web
+-   F3 Malawi Household Resilience (2004)
+-   F4 Malawi Household Resilience (2010)
+-   F5 Malawi Composite Vulnerability Index
+-   A1 Appendix 1
+-   R References
 
 ## Other References
 
-Barrett, S. 2014. Subnational Climate Justice? Adaptation Finance Distribution and Climate Vulnerability. World Development 58:130–142. DOI: [10.1016/j.worlddev.2014.01.014](http://dx.doi.org/10.1016/j.worlddev.2014.01.014).
-Gallopín, G. C. 2006. Linkages Between Vulnerability, Resilience, and Adaptive Capacity. Global Environmental Change 16 (3):293–303. DOI: [10.1016/j.gloenvcha.2006.02.004](https://doi.org/10.1016/j.gloenvcha.2006.02.004).
-Rufat, S., E. Tate, C. G. Burton, and A. S. Maroof. 2015. Social vulnerability to floods: Review of case studies and implications for measurement. *International Journal of Disaster Risk Reduction* 14:470–486. DOI: [10.1016/j.ijdrr.2015.09.013](http://dx.doi.org/10.1016/j.ijdrr.2015.09.013).
-Smit, B., and J. Wandel. 2006. Adaptation, adaptive capacity and vulnerability. Global Environmental Change 16 (3):282–292. DOI: [10.1016/j.gloenvcha.2006.03.008](https://doi.org/10.1016/j.gloenvcha.2006.03.008).
+Barrett, S.
+2014.
+Subnational Climate Justice?
+Adaptation Finance Distribution and Climate Vulnerability.
+World Development 58:130--142.
+DOI: [10.1016/j.worlddev.2014.01.014](http://dx.doi.org/10.1016/j.worlddev.2014.01.014).
+Gallopín, G. C.
+2006.
+Linkages Between Vulnerability, Resilience, and Adaptive Capacity.
+Global Environmental Change 16 (3):293--303.
+DOI: [10.1016/j.gloenvcha.2006.02.004](https://doi.org/10.1016/j.gloenvcha.2006.02.004).
+Rufat, S., E. Tate, C. G. Burton, and A.
+S. Maroof.
+2015.
+Social vulnerability to floods: Review of case studies and implications for measurement.
+*International Journal of Disaster Risk Reduction* 14:470--486.
+DOI: [10.1016/j.ijdrr.2015.09.013](http://dx.doi.org/10.1016/j.ijdrr.2015.09.013).
+Smit, B., and J.
+Wandel.
+2006.
+Adaptation, adaptive capacity and vulnerability.
+Global Environmental Change 16 (3):282--292.
+DOI: [10.1016/j.gloenvcha.2006.03.008](https://doi.org/10.1016/j.gloenvcha.2006.03.008).
