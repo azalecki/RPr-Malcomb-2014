@@ -904,7 +904,7 @@ rm(ta_stats, ta_capacity_t)
 # making a histogram for rpac  
 
 hist_rpac <- ta_v$rpac
-hist(hist_rpac)
+hist(hist_rpac, breaks= 25)
 
 ```
 
@@ -927,7 +927,72 @@ ta_v <- mutate(ta_v, rpac_class = case_when(
 
 ta_v %>% st_drop_geometry() %>% count(rpac_class) %>% kable()
 ```
+Based on the histogram that was generated earlier, I believe that a pretty breaks classification would also prove valuable when mapping the data. 
 
+```{r other-classifications, warning= F}
+
+# calculate breaks for four pretty breaks classes 
+rpac_brks_prty <- classIntervals(ta_v$rpac, 4, style = "pretty")$brks
+#rpac_brks_fig4_prty <- c(7.406, 15.46, 18.07, 21.09, 25.77)
+
+# label classes 
+rpa_int_prty <- lapply(1:4, function(x) paste0(round(rpac_brks[x],2)," - ", round(rpac_brks[x +1],2))) %>% unlist()
+
+ta_v_prty <- mutate(ta_v, rpac_class = case_when(
+  rpac <= rpac_brks_prty[2] ~ 1,
+  rpac <= rpac_brks_prty[3] ~ 2,
+  rpac <= rpac_brks_prty[4] ~ 3,
+  rpac >  rpac_brks_prty[4] ~ 4
+))
+
+ta_v_prty %>% st_drop_geometry() %>% count(rpac_class) %>% kable()
+
+# calculate breaks for four equal breaks classes 
+rpac_brks_eq <- classIntervals(ta_v$rpac, 4, style = "equal")$brks
+
+# label classes 
+rpa_int_eq <- lapply(1:4, function(x) paste0(round(rpac_brks[x],2)," - ", round(rpac_brks[x +1],2))) %>% unlist()
+
+ta_v_eq <- mutate(ta_v, rpac_class = case_when(
+  rpac <= rpac_brks_eq[2] ~ 1,
+  rpac <= rpac_brks_eq[3] ~ 2,
+  rpac <= rpac_brks_eq[4] ~ 3,
+  rpac >  rpac_brks_eq[4] ~ 4
+))
+
+ta_v_eq %>% st_drop_geometry() %>% count(rpac_class) %>% kable()
+
+# calculate breaks for four standard deviation breaks classes 
+rpac_brks_sd <- classIntervals(ta_v$rpac, 4, style = "sd")$brks
+
+# label classes 
+rpa_int_sd <- lapply(1:4, function(x) paste0(round(rpac_brks[x],2)," - ", round(rpac_brks[x +1],2))) %>% unlist()
+
+ta_v_sd <- mutate(ta_v, rpac_class = case_when(
+  rpac <= rpac_brks_sd[2] ~ 1,
+  rpac <= rpac_brks_sd[3] ~ 2,
+  rpac <= rpac_brks_sd[4] ~ 3,
+  rpac >  rpac_brks_sd[4] ~ 4
+))
+
+ta_v_sd %>% st_drop_geometry() %>% count(rpac_class) %>% kable()
+
+# calculate breaks for four quantile breaks classes 
+rpac_brks_q <- classIntervals(ta_v$rpac, 4, style = "quantile")$brks
+
+# label classes 
+rpa_int_q <- lapply(1:4, function(x) paste0(round(rpac_brks[x],2)," - ", round(rpac_brks[x +1],2))) %>% unlist()
+
+ta_v_q <- mutate(ta_v, rpac_class = case_when(
+  rpac <= rpac_brks[2] ~ 1,
+  rpac <= rpac_brks[3] ~ 2,
+  rpac <= rpac_brks[4] ~ 3,
+  rpac >  rpac_brks[4] ~ 4
+))
+
+ta_v_q %>% st_drop_geometry() %>% count(rpac_class) %>% kable()
+
+```
 ### Reproduction figure 4
 
 Map reproduction results for comparison to figure 4.
@@ -939,8 +1004,52 @@ tm_shape(lakes_v, bbox="Malawi") +
 tm_shape(ta_cons_v) +
   tm_fill(col="TYPE_2", palette=hcl.colors(4, "greens"), alpha=0.7, title="") +
 tm_shape(ta_v) + 
-  tm_polygons(col="rpac", breaks=rpac_brks, title="Adaptive Capacity", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
+  tm_polygons(col="rpac", breaks=rpac_brks_prty, title="Adaptive Capacity", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
 tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
+
+# remaking the previous map but with pretty classification 
+tmap_mode("plot")
+tm_shape(lakes_v, bbox="Malawi") +
+  tm_fill(col="lightblue") +
+tm_shape(ta_cons_v) +
+  tm_fill(col="TYPE_2", palette=hcl.colors(4, "greens"), alpha=0.7, title="") +
+tm_shape(ta_v_prty) + 
+  tm_polygons(col="rpac", breaks=rpac_brks_prty, title="Adaptive Capacity (Pretty)", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
+tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
+
+# map but with equal classification 
+
+tmap_mode("plot")
+tm_shape(lakes_v, bbox="Malawi") +
+  tm_fill(col="lightblue") +
+tm_shape(ta_cons_v) +
+  tm_fill(col="TYPE_2", palette=hcl.colors(4, "greens"), alpha=0.7, title="") +
+tm_shape(ta_v_eq) + 
+  tm_polygons(col="rpac", breaks=rpac_brks_eq, title="Adaptive Capacity (Equal) ", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
+tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
+
+# map but with standard deviation classification 
+
+tmap_mode("plot")
+tm_shape(lakes_v, bbox="Malawi") +
+  tm_fill(col="lightblue") +
+tm_shape(ta_cons_v) +
+  tm_fill(col="TYPE_2", palette=hcl.colors(4, "greens"), alpha=0.7, title="") +
+tm_shape(ta_v_sd) + 
+  tm_polygons(col="rpac", breaks=rpac_brks_sd, title="Adaptive Capacity (SD)", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
+tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
+
+# map but with quantile classes
+
+tmap_mode("plot")
+tm_shape(lakes_v, bbox="Malawi") +
+  tm_fill(col="lightblue") +
+tm_shape(ta_cons_v) +
+  tm_fill(col="TYPE_2", palette=hcl.colors(4, "greens"), alpha=0.7, title="") +
+tm_shape(ta_v_q) + 
+  tm_polygons(col="rpac", breaks=rpac_brks_q, title="Adaptive Capacity(Quantile)", palette="-YlOrBr", lwd=0.5, border.col="lightgrey") +
+tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
+
 
 ```
 
