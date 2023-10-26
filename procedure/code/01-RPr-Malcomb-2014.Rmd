@@ -1052,6 +1052,8 @@ tm_layout(legend.width=3, legend.text.size = .6, legend.title.size = 1, asp=0.8)
 
 
 ```
+### Slight deviation 
+I was curious to see if there was a better way to represent the data based on the numeric classification that was used to map Adaptive Capacity. Four additional maps were generated with other classification methods to observe the differences in data visualization. In the original study, the Jenks method which after comparing with the other methods, I am more confident in using to visualize the data. 
 
 ### Evaluate adaptive capacity reproduction
 
