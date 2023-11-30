@@ -2,7 +2,7 @@
 title: "Reproduction Analysis of Malcomb et al 2014"
 author: "Joseph Holler, Kufre Udoh, Drew An-Pham, Middlebury Open GIScience Classes"
 date: "`r Sys.Date()`"
-output: pdf_document
+output: html_document
 editor_options:
   markdown:
     wrap: sentence
@@ -547,7 +547,7 @@ dhs_downloads <- get_datasets(
 
 Load tabular data of household surveys
 
-```{r load DHS survey data, messages=FALSE, warnings=FALSE}
+```{r load DHS survey data, messages=FALSE, warnings=FALSE, eval = FALSE}
 dhshh <- readRDS(here(private_r, "datasets", "MWHR61SV.rds")) %>%
   zap_labels()
 head(dhshh)
@@ -556,7 +556,7 @@ head(dhshh)
 Load geographic data of household survey clusters.
 Some household survey points are erroneously placed at the WGS 1984 coordinate reference system origin (Equator and Prime Meridian).
 
-```{r load-DHS-geog-data, fig.height = 2}
+```{r load-DHS-geog-data, fig.height = 2, eval = FALSE}
 dhsclusters <- readRDS(here(private_r, "datasets", "MWGE62FL.rds")) %>%
   as("sf") # convert to simple features
 
@@ -571,7 +571,7 @@ Surveys are grouped into clusters with one geographic point.
 Therefore, the traditional authority to which each survey will be assigned must be spatially joined to the cluster point, and then joined by attribute to the household survey.
 The adaptive capacity calculation at the household level also requires urban/rural status, which is stored in the cluster.
 
-```{r join-clusters-to-tas}
+```{r join-clusters-to-tas, eval = FALSE}
 # spatial join traditional authority ID to clusters and drop geometry
 # study may be reanalyzed by buffering GPS points to account for 
 # GPS location randomization
@@ -584,14 +584,14 @@ cluster_ta <- dhsclusters %>%
 cluster_ta %>% saveRDS(here(public_d, "cluster_ta.rds"))
 ```
 
-```{r load-cluster-ta}
+```{r load-cluster-ta, eval = FALSE}
 cluster_ta <- readRDS(here(public_d, "cluster_ta.rds"))
 paste(sum(is.na(cluster_ta$ta_id)),
   "of", nrow(cluster_ta), 
   "clusters did not spatially join to a populated traditional authority") %>% noquote()
 ```
 
-```{r join-clusterta-to-surveys}
+```{r join-clusterta-to-surveys, eval = FALSE}
 # join traditional authority and urban/rural data from DHS clusters to each DHS survey
 # select variables for adaptive capacity analysis
 dhshh <- dhshh %>%
@@ -635,7 +635,7 @@ Many household surveys contain inconclusive answers (e.g. "I don't know") or are
 The livestock variable will be calculated as a sum of four livestock types, so we remove any household with uncertain answers about any of the livestock types and remove households with missing data for all livestock types.
 Households with answers about some livestock types and missing data for others are still included in the data.
 
-```{r find-missing-hh-data}
+```{r find-missing-hh-data, eval = FALSE}
 incomplete <- dhshh %>%  
   filter(
     HV246A >= 98  |
@@ -657,7 +657,7 @@ paste(nrow(incomplete), "household surveys with incomplete attribute data") %>%
 
 We remove incomplete household surveys.
 
-```{r remove-missing-hh-data}
+```{r remove-missing-hh-data, eval = FALSE}
 paste(nrow(dhshh), "total household surveys")
 
 hh_capacity_t <- dhshh %>%
@@ -755,7 +755,7 @@ We had to make many assumptions about calculating individual components, e.g. ab
 Rescaling to a quintile rank as described in the original study is unclear, especially considering the number of discrete or even binary inputs.
 We have made a judgement call to do this by calculating percent rank and multiplying by 4, producing a theoretical domain of 0 to 4 similar to that of quintiles.
 
-```{r rescale-capacity-vars}
+```{r rescale-capacity-vars, eval = FALSE}
 hh_capacity_t <- hh_capacity_t  %>%
   # sum livestock, including HH with some missing values
   rowwise() %>%
@@ -790,7 +790,7 @@ head(hh_capacity_t[,20:32])
 Calculate household-level adaptive capacity scores based on original study Table 2 weights.
 The indicators have already been rescaled to a possible domain of `0` to `4`, and the weights sum to `0.4`, giving a possible domain of adaptive capacity scores from `0.0` to `1.6`.
 
-```{r hh-capacity}
+```{r hh-capacity, eval = FALSE}
 hh_capacity_t <- mutate(hh_capacity_t, capacity = 
                         0.04 * livestock +
                         0.03 * sick +
@@ -811,7 +811,7 @@ head(hh_capacity_t[,c(33,21:32)])
 
 Summary statistics of adaptive capacity and its components at the household level.
 
-```{r hh-capacity-summary}
+```{r hh-capacity-summary, eval = FALSE}
 hh_stats <- stat.desc(hh_capacity_t[,c(33,21:32)]) %>%
   mutate_if(is.numeric, round, digits=2)
 hh_stats[-c(1:3, 7, 10:12, 14),] %>% t() %>% kable() # brackets remove unnecessary statistics from output
@@ -824,7 +824,7 @@ Aggregate household adaptive capacity scores to traditional authorities.
 The original paper found adaptive capacity scores for 203 TAs, of which we found 6 TAs were conservation areas, leaving 197 meaningful TA scores.
 We created an additional 9 TAs from errors from three features on Lake Malawi, so if the original authors did not notice those errors, we could expect scores for 206 TAs.
 
-```{r aggregate-capacity-to-tas}
+```{r aggregate-capacity-to-tas, eval = FALSE}
 ta_capacity_t <- hh_capacity_t %>% 
   group_by(ta_id) %>%
   summarize(
@@ -850,7 +850,7 @@ ta_capacity_t <- hh_capacity_t %>%
 
 Now that household adaptive capacity data has been aggregated, they may be saved to the `data\derived\public` directory.
 
-```{r save-TA-adaptive-capacity}
+```{r save-TA-adaptive-capacity, eval = FALSE}
 ta_capacity_t %>% saveRDS(here(public_d, "adaptive_capacity.RDS"))
 rm(list=c("dhsclusters", "dhshh", "cluster_ta", "hh_capacity_t", "ta_capacity_t"))
 ```
@@ -1260,7 +1260,7 @@ plot(drought_r)
 
 Clip and warp flood risk to match our extent and spatial resolution.
 
-```{r clip-map-drought-exposure, warning = F}
+```{r clip-map-drought-exposure-2, warning = F}
 names(fl) <- "fl"
 # convert from factors to numeric
 fl$fl <- fl$fl %>% as.character() %>% as.numeric() %>% matrix(dim(fl)[1])
